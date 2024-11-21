@@ -40,9 +40,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Spiel-Schleife
     bool running = true;
     SDL_Event e;
+    int mouseX, mouseY;
+
     while (running) {
+
         // Event-Handling
         SDL_PumpEvents();
+
+        SDL_RenderClear(renderer);
+
+        // Render-Zeichenoperationen-Hintergrund
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 running = false;
@@ -55,7 +64,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         break;
 
                     case SDLK_0:
-
                         break;
                     default:
                         //TODO Log-File System
@@ -64,16 +72,54 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         break;
                 }
             }
+
+            if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
+                // Mausposition speichern
+                SDL_GetMouseState(&mouseX, &mouseY);
+                std::cout << "Klick bei X: " << mouseX << ", Y: " << mouseY << std::endl;
+
+                // Neues Rechteck erstellen
+                SDL_Rect new_rect = create_rectangle(mouseX - 50, mouseY - 50, 100, 100, renderer);
+
+                // Rechteck zur Liste hinzufügen, wenn Platz vorhanden ist
+                for (int i = 0; i < MAX; i++) {
+                    if (list_rect[i].w == 0 && list_rect[i].h == 0) { // Leerer Platz
+                        list_rect[i] = new_rect;
+                        rect_num++; // Zähler erhöhen
+                        std::cout << rect_num << std::endl;
+                        break;
+                    }
+                }
+            }
+
         }
 
-        // Bildschirm löschen
-        SDL_RenderClear(renderer);
+        /*
+        Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
 
-        // Render-Zeichenoperationen-Hintergrund
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Rot
-        SDL_RenderClear(renderer);
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+            std::cout << rect_num;
 
-        SDL_Rect test = create_rectangle(100,100,30,30,renderer);
+            //TODO Funktion welche create und speichern beinhaltet
+            new_rect = create_rectangle(100, 100, mouseX, mouseY, renderer);
+            for(auto & i : list_rect){
+                if(i.w == 0 && i.h == 0){
+                    i = new_rect;
+                    rect_num++;
+                    break;
+                }
+            }
+        }*/
+
+        // Alle Rechtecke zeichnen
+        for (int i = 0; i < MAX; i++) {
+            if (list_rect[i].w != 0 && list_rect[i].h != 0) { // Nur gefüllte Rechtecke zeichnen
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Setze Farbe für das Rechteck (Rot)
+                SDL_RenderFillRect(renderer, &list_rect[i]); // Rechteck zeichnen
+            }
+        }
+
+        //SDL_Rect test = create_rectangle(100,100,30,30,renderer);
         SDL_RenderPresent(renderer);
 
     }

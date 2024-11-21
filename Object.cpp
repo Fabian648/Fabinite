@@ -4,6 +4,9 @@
 
 #include "Object.h"
 
+SDL_Rect list_rect [MAX] = {};
+int rect_num = 0;
+
 SDL_Rect create_rectangle(int width, int length, int x, int y,SDL_Renderer* render){
     SDL_RenderClear(render);
     SDL_Rect test = {x,y,width,length};
