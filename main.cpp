@@ -1,7 +1,13 @@
 #include <SDL.h>
 #include <iostream>
+#include "Object.h"
+#include "Log.h"
 
-int WinMain(int argc, char* argv[]) {
+//int main(int argc, char* argv[]) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    //Log-System initalisieren
+    create_log_system();
+
     // SDL2 initialisieren
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL konnte nicht initialisiert werden! SDL_Error: " << SDL_GetError() << std::endl;
@@ -14,7 +20,8 @@ int WinMain(int argc, char* argv[]) {
                                           800, 600, SDL_WINDOW_SHOWN);
 
     //TODO Abfrage von Betriebssystem SDL_SetWindowFullscreen funktioniert bloß in Windows
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     if (!window) {
         std::cerr << "Fenster konnte nicht erstellt werden! SDL_Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -35,22 +42,40 @@ int WinMain(int argc, char* argv[]) {
     SDL_Event e;
     while (running) {
         // Event-Handling
+        SDL_PumpEvents();
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 running = false;
+            }
+
+            if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                        running = false;
+                        break;
+
+                    case SDLK_0:
+
+                        break;
+                    default:
+                        //TODO Log-File System
+                        //std::cout << "Taste gedrueckt: " << e.key.keysym.sym << std::endl;
+                        writelog_input(keyToString(e.key.keysym.sym));
+                        break;
+                }
             }
         }
 
         // Bildschirm löschen
         SDL_RenderClear(renderer);
 
-        // Render-Zeichenoperationen
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Rot
-        SDL_Rect fillRect = { 100, 100, 200, 150 };  // Rechteck
-        SDL_RenderFillRect(renderer, &fillRect);
+        // Render-Zeichenoperationen-Hintergrund
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Rot
+        SDL_RenderClear(renderer);
 
-        // Anzeige aktualisieren
+        SDL_Rect test = create_rectangle(100,100,30,30,renderer);
         SDL_RenderPresent(renderer);
+
     }
 
     // Ressourcen freigeben

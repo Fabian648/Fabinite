@@ -15,6 +15,8 @@ link_directories(${SDL2_DIR}/lib/x64)
 add_executable(Engine main.cpp
         Object.cpp
         Object.h
+        Log.cpp
+        Log.h
 )
 
 # SDL2-Bibliotheken verlinken
