@@ -53,9 +53,6 @@ void writelog_error(std::string message){
         datei << "Neuer Text wird hinzugefügt!\n";
         datei.close();
     }
-    //std::ofstream ofs(error_path);
-    //ofs << ctime(&timestamp) << "\t" << message;
-    //ofs.close();
 }
 
 void writelog_input(std::string message){

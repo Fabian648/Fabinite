@@ -18,5 +18,5 @@ extern int rect_num;
 
 
 // functions
-SDL_Rect create_rectangle(int width, int length, int x, int y, SDL_Renderer* render);
+const SDL_Rect * create_rectangle(int width, int length, int x, int y, SDL_Renderer* render);
 #endif //ENGINE_OBJECT_H

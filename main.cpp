@@ -2,10 +2,11 @@
 #include <iostream>
 #include "Object.h"
 #include "Log.h"
+#include <windows.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Log-System initialisieren
-    create_log_system();
+    //create_log_system();
 
     // SDL2 initialisieren
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -16,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Erstelle ein Fenster
     SDL_Window* window = SDL_CreateWindow("Game Engine",
                                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                          800, 600, SDL_WINDOW_SHOWN);
+                                          1000, 1000, SDL_WINDOW_SHOWN);
 
     //TODO Abfrage von Betriebssystem SDL_SetWindowFullscreen funktioniert bloß in Windows
     //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -28,6 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Render-Context erstellen
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    //
     if (!renderer) {
         std::cerr << "Renderer konnte nicht erstellt werden! SDL_Error: " << SDL_GetError() << std::endl;
         SDL_DestroyWindow(window);
@@ -41,27 +43,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int mouseX, mouseY;
 
     while (running) {
-        // Event-Handling
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-
-        //SDL_PumpEvents();
-
-
-        // Hintergrundfarbe setzen
-
-
+        SDL_PumpEvents();
         while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
+            if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
                 running = false;
             }
 
             if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        running = false;
-                        break;
-
                     case SDLK_0:
                         // Ausgabe der Positionen der Rechtecke
                         for (size_t i = 0; i < list_rect.size(); i++) {
@@ -70,35 +59,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         }
                         break;
                     default:
-                        writelog_input(keyToString(e.key.keysym.sym));
+                        //writelog_input(keyToString(e.key.keysym.sym));
                         break;
                 }
             }
 
+            // Mausklick überprüfen
             if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
-                // Mausposition speichern
+                // Mausposition erhalten
                 SDL_GetMouseState(&mouseX, &mouseY);
-                std::cout << "Klick bei X: " << mouseX << ", Y: " << mouseY << std::endl;
+                std::cout << "Linker Mausklick bei X: " << mouseX << ", Y: " << mouseY << std::endl;
 
-                // Neues Rechteck erstellen und zu list_rect hinzufügen
-                SDL_Rect new_rect = create_rectangle(100, 100, mouseX, mouseY, renderer);
+                // Neues Rechteck erstellen
+                create_rectangle(100, 100, mouseX, mouseY, renderer);
             }
         }
-        //Test
-        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Rot
-        //SDL_Rect fillRect = { 100, 100, 200, 150 };  // Rechteck
-        //SDL_RenderFillRect(renderer, &fillRect);
 
-        // Alle Rechtecke zeichnen
-        for (size_t i = 0; i < list_rect.size(); i++) {
+        // Hintergrundfarbe setzen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Schwarz
+        SDL_RenderClear(renderer);
 
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Setze Farbe für das Rechteck (Rot)
-            SDL_RenderFillRect(renderer, &list_rect[i]); // Rechteck zeichnen
+        // Rechtecke zeichnen
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Rot
+
+        // Alle Rechtecke rendern
+        for (const auto& rect : list_rect) {
+            SDL_RenderFillRect(renderer, &rect);
         }
 
-
-
-        SDL_RenderPresent(renderer); // Zeichnen anzeigen
+        // Anzeige aktualisieren
+        SDL_RenderPresent(renderer);
     }
 
     // Ressourcen freigeben
