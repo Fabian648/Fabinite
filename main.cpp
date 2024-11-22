@@ -4,6 +4,10 @@
 #include "Log.h"
 #include <windows.h>
 
+//TODO Konsolen-Ausgabe möglich machen
+//TODO Rechtecke verschieben
+//TODO Rechtecke löschen
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Log-System initialisieren
     //create_log_system();

@@ -1,7 +1,7 @@
 //
 // Created by fabia on 21.11.2024.
 //
-
+//TODO Fehler finden - Log System hat Rechteck rendering blockiert
 #include "Log.h"
 
 namespace fs = std::filesystem;

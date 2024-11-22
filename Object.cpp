@@ -8,6 +8,7 @@ std::vector<SDL_Rect> list_rect;
 int rect_num = 0;
 SDL_Rect rect = {};
 
+//TODO Funktion erweitern zu Farbe
 const SDL_Rect * create_rectangle(int width, int length, int x, int y, SDL_Renderer* render) {
 
     //rect = {x: rect_x, y: rect_y, w:width, h:length};
