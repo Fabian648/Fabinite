@@ -64,6 +64,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         break;
 
                     case SDLK_0:
+                        for(int i = 0; i< MAX;i++){
+                            printf("Index: %d \n", i);
+                            printf("%d \n",list_rect[i].x);
+                        }
                         break;
                     default:
                         //TODO Log-File System
@@ -85,6 +89,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 for (int i = 0; i < MAX; i++) {
                     if (list_rect[i].w == 0 && list_rect[i].h == 0) { // Leerer Platz
                         list_rect[i] = new_rect;
+
                         rect_num++; // Zähler erhöhen
                         std::cout << rect_num << std::endl;
                         break;
@@ -93,23 +98,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             }
 
         }
-
-        /*
-        Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
-
-        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-            std::cout << rect_num;
-
-            //TODO Funktion welche create und speichern beinhaltet
-            new_rect = create_rectangle(100, 100, mouseX, mouseY, renderer);
-            for(auto & i : list_rect){
-                if(i.w == 0 && i.h == 0){
-                    i = new_rect;
-                    rect_num++;
-                    break;
-                }
-            }
-        }*/
 
         // Alle Rechtecke zeichnen
         for (int i = 0; i < MAX; i++) {
