@@ -7,17 +7,19 @@
 //SDL_Rect list_rect [MAX] = {};
 std::vector<SDL_Rect> list_rect;
 int rect_num = 0;
+SDL_Rect rect = {};
+
 /*
 SDL_Rect create_rectangle(int width, int length, int x, int y,SDL_Renderer* render){
-    SDL_Rect rect = {x,y,width,length};
+    rect = {x: x, y: y, w:width, h:length};
 
     //TODO HexCode Einlesen und in Farbcode umwandeln/vordefinierte Farben definieren
-    SDL_SetRenderDrawColor(render,255,0,0,255);
-    SDL_RenderFillRect(render, &rect);
+    list_rect.push_back(rect);
+    rect_num++; // Erhöhe den Zähler
     return rect;
 }
- */
-/*
+*/
+
 SDL_Rect create_rectangle(int width, int length, int x, int y, SDL_Renderer* render) {
     // Berechnung der Position des Rechtecks, sodass der Mauszeiger in der Mitte des Rechtecks bleibt
     int rect_x = x - width / 2;  // Versatz für die Mitte des Rechtecks
@@ -39,18 +41,17 @@ SDL_Rect create_rectangle(int width, int length, int x, int y, SDL_Renderer* ren
     if (rect_y + length > screen_height) {
         rect_y = screen_height - length;
     }
-
-    SDL_Rect rect = {rect_x, rect_y, width, length};
+    rect = {x: rect_x, y: rect_y, w:width, h:length};
 
     // Rechteck zeichnen (rote Farbe)
-    SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
-    SDL_RenderFillRect(render, &rect);
+    //SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+    //SDL_RenderFillRect(render, &rect);
 
     list_rect.push_back(rect);
     rect_num++; // Erhöhe den Zähler
-    std::cout << "Rechteck zu Index " << rect_num - 1 << " hinzugefügt. Gesamtzahl: " << rect_num << std::endl;
-
+    std::cout << "Rechteck erstellt: ("
+              << rect.x << ", " << rect.y << ", " << rect.w << ", " << rect.h
+              << ") - Gesamtanzahl: " << list_rect.size() << std::endl;
 
     return rect;
 }
-*/
